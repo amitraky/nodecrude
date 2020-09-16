@@ -1,0 +1,76 @@
+<h3><a class="btn btn-secondary" href="/employee"><i class="fa fa-plus"></i> Create New</a> Employee List</h3>
+<table class="table table-striped" id="example">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>City</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+</table>
+
+
+<script>
+
+    $(function () {
+        var counter = 0;
+        var table = $('#example').DataTable({
+            ajax: "data",
+            "processing": true,
+            "serverSide": true,
+            "aoColumns": [
+                {
+                    'mData': '_id', 'mRender': function (row, data, index, n) {
+                        return n.row + 1
+                    }
+                },
+                { 'mData': 'city' },
+                { 'mData': 'email' },
+                { 'mData': 'fullName' },
+                { 'mData': 'mobile' },
+                { 'mData': function(){
+                    return 'Active';
+                } },
+            ],
+
+            dom: 'Bfrtip',
+            "lengthMenu": [[10, 250, 500, 1000, -1], [10, 250, 500, 1000, "All"]],
+            buttons: [
+
+                'copy',
+                'csv',
+                {
+                    extend: "excel",                    // Extend the excel button
+                    customize: function (win) {
+
+                        console.log(win)
+                        win.styles.tableHeader.fontSize = 12
+                        win.styles.tableHeader.color = 'red';
+
+                    }
+                },
+                'print',
+                {
+                    extend: 'pdf',
+                    content:[{"text":"Employee List"}],
+                    orientation: 'landscape',
+                    key: {
+                        key: '_id',
+                        altkey: '1'
+                    },
+                    customize: function (win) {
+                        console.log(win);
+                        win.styles.tableHeader.fontSize = 8
+                        win.styles.tableHeader.color = 'red';
+                    }
+                },
+                'pageLength'
+            ],
+
+        });
+    });
+</script>
