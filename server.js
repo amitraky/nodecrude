@@ -6,6 +6,8 @@ const exphbs = require('express-handlebars');
 const bodyparser = require('body-parser');
 
 const employeeController = require('./controllers/employeeController');
+const welcomeController = require('./controllers/welcomeController');
+const movieController = require('./controllers/movieController');
 
 var app = express();
 app.use(bodyparser.urlencoded({
@@ -20,9 +22,11 @@ app.listen(5000, () => {
     console.log('Express server started at port : 5000');
 });
 app.get('/',function(request,response){
-    response.redirect('employee/list');
+    response.redirect('welcome/welcome');
 })
 
 
 
 app.use('/employee', employeeController);
+app.use('/welcome', welcomeController);
+app.use('/movie', movieController);
