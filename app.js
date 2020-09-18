@@ -8,14 +8,18 @@ const bodyparser = require('body-parser');
 const employeeController = require('./controllers/employeeController');
 const welcomeController = require('./controllers/welcomeController');
 const movieController = require('./controllers/movieController');
+const authController = require('./controllers/authController');
 
 var app = express();
 app.use(bodyparser.urlencoded({
     extended: true
 }));
+app.use('public',express.static('css'));
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, 'static')));
 app.use(bodyparser.json());
 app.set('views', path.join(__dirname, '/views/'));
-app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'mainLayout', layoutsDir: __dirname + '/views/layouts/' }));
+app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'portal', layoutsDir: __dirname + '/views/layouts/' }));
 app.set('view engine', 'hbs');
 
 app.listen(5000, () => {
@@ -30,3 +34,4 @@ app.get('/',function(request,response){
 app.use('/employee', employeeController);
 app.use('/welcome', welcomeController);
 app.use('/movie', movieController);
+app.use('/auth', authController);
