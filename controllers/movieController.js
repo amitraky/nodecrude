@@ -3,33 +3,31 @@ var router = express.Router();
 const mongoose = require("mongoose");
 const Movie = mongoose.model("Movie");
 
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
 router.get("/", (req, res) => {
   res.render("movie/addOrEdit", {
     viewTitle: "Insert Movie",
   });
 });
 
-router.post("/", (req, res) => {
-  if (req.body._id == "") insertRecord(req, res);
-  else updateRecord(req, res);
+router.post("/add",upload.fields([{name:'photo2'},{name:'photo'}]), (req, res) => {
+  insertRecord(req, res);
 });
 
 function insertRecord(req, res) {
+	
+	//return res.send(req.files.photo[0].filename);
   var movie = new Movie();
-  movie.name = req.body.fullName;
-  movie.year = req.body.email;
-  
-  movie.save((err, doc) => {
-    if (!err) res.redirect("movie/list");
-    else {
-      if (err.name == "ValidationError") {
-        handleValidationError(err, req.body);
-        res.render("movie/addOrEdit", {
-          viewTitle: "Insert Movie",
-          movie: req.body,
-        });
-      } else console.log("Error during record insertion : " + err);
-    }
+  movie.name = 'Xman';
+  movie.year = '2010';
+  movie.photo = req.files.photo[0].filename;
+  movie.photo2 = req.files.photo2[0].filename;
+ 
+  movie.insert((err, doc) => {
+	  console.log(doc);
+       res.send(doc);
+	    return;
   });
 }
 
@@ -96,15 +94,8 @@ function handleValidationError(err, body) {
   }
 }
 
-router.get("/:id", (req, res) => {
-  Movie.findById(req.params.id, (err, doc) => {
-    if (!err) {
-      res.render("movie/addOrEdit", {
-        viewTitle: "Update Movie",
-        movie: doc,
-      });
-    }
-  });
+router.get("/add", (req, res) => {
+res.render("movie/add");
 });
 
 router.get("/delete/:id", (req, res) => {

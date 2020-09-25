@@ -14,13 +14,14 @@ var app = express();
 app.use(bodyparser.urlencoded({
     extended: true
 }));
-app.use('public',express.static('css'));
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(express.static(path.join(__dirname, 'static')));
 app.use(bodyparser.json());
 app.set('views', path.join(__dirname, '/views/'));
 app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'portal', layoutsDir: __dirname + '/views/layouts/' }));
 app.set('view engine', 'hbs');
+
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
 
 app.listen(5000, () => {
     console.log('Express server started at port : 5000');
